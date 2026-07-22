@@ -1,15 +1,18 @@
-import {Route, BrowserRouter, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Login from '../pages/Login'
+import Register from '../pages/Register'
+import Home from '../pages/Home'
 
-const AppRoutes = () =>{
-    return(
+const AppRoutes = () => {
+    return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<div>Home</div>} />
-                <Route path="/login" element={<div>Login</div>} />
-                <Route path="/register" element={<div>Register</div>} />
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
             </Routes>
         </BrowserRouter>
     )
 }
 
-export default AppRoutes;
+export default AppRoutes
