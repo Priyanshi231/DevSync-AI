@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-slate-950 to-indigo-950 text-white">
+    <div className="min-h-screen bg-linear-to-br from-zinc-950 via-slate-950 to-indigo-950 text-white">
 
       {/* ================= Navbar ================= */}
 
@@ -34,7 +34,7 @@ const Home = () => {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
 
           <div>
-            <h1 className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-3xl font-bold text-transparent">
+            <h1 className="bg-linear-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-3xl font-bold text-transparent">
               DevSync AI
             </h1>
 
@@ -45,7 +45,7 @@ const Home = () => {
 
           <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-lg">
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-lg font-bold">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-cyan-500 text-lg font-bold">
               {user?.email?.charAt(0).toUpperCase()}
             </div>
 
@@ -86,7 +86,7 @@ const Home = () => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="mt-8 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-7 py-3 font-semibold shadow-lg shadow-cyan-500/20 transition duration-300 hover:scale-105"
+            className="mt-8 rounded-xl bg-linear-to-r from-cyan-500 to-blue-600 px-7 py-3 font-semibold shadow-lg shadow-cyan-500/20 transition duration-300 hover:scale-105"
           >
             + Create New Project
           </button>
@@ -234,7 +234,7 @@ const Home = () => {
 
               <button
                 onClick={createProject}
-                className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2 font-semibold transition hover:scale-105"
+                className="rounded-xl bg-linear-to-r from-cyan-500 to-blue-600 px-6 py-2 font-semibold transition hover:scale-105"
               >
                 Create
               </button>
