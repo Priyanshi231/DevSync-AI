@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect} from "react";
 import { UserContext } from "../context/user.context";
 import axios from "../config/axios";
 
@@ -7,6 +7,7 @@ const Home = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [project, setProject] = useState([]);
 
   const createProject = async () => {
     if (!projectName.trim()) return;
@@ -24,6 +25,17 @@ const Home = () => {
       console.log(err.response?.data || err.message);
     }
   };
+
+  useEffect(() => {
+    axios.get("/projects/all")
+      .then(res => {
+        setProject(res.data.projects);
+      })
+      .catch(err => {
+        console.log("Error fetching projects:", err.response?.data || err.message);
+  });
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-zinc-950 via-slate-950 to-indigo-950 text-white">
@@ -114,7 +126,7 @@ const Home = () => {
               </p>
 
               <h4 className="mt-1 text-3xl font-bold">
-                0
+                {project.length}
               </h4>
             </div>
 
@@ -145,18 +157,14 @@ const Home = () => {
             <h2 className="text-3xl font-bold">
               Recent Projects
             </h2>
-
-            <p className="mt-2 text-zinc-400">
-              Create your first project to start collaborating.
-            </p>
-
+  
           </div>
 
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
-          {/* Create Project Card */}
+          {/* Project Card */}
 
           <button
             onClick={() => setIsModalOpen(true)}
@@ -164,25 +172,34 @@ const Home = () => {
           >
 
             <div className="flex h-24 w-24 items-center justify-center rounded-full bg-cyan-500/10 text-6xl text-cyan-400 transition duration-500 group-hover:rotate-90">
-
               +
-
             </div>
 
             <h3 className="mt-8 text-2xl font-semibold">
-
               Create Project
-
             </h3>
-
-            <p className="mt-3 text-center text-zinc-400">
-
-              Start building your next AI powered application.
-
-            </p>
-
           </button>
+          
 
+            {project.map((project) => (
+
+              <button
+                className="group flex h-72 flex-col items-center justify-center rounded-3xl border border-dashed border-cyan-500/40 bg-white/5 backdrop-blur-xl transition-all duration-300 hover:scale-[1.03] hover:border-cyan-400 hover:bg-cyan-500/10"
+              >
+                
+              <div key={project._id} className="rounded-xl bg-white/5 p-4">
+                <h2 className="text-xl font-semibold">{project.name}</h2>
+
+                <div className="mt-2 flex items-center gap-2">
+                  <p><i className ="ri-user-3-fill"></i> <small>Collaborators: </small></p>
+                   {project.users.length}
+                </div>
+              </div>
+              
+          </button>
+                
+            ))}
+ 
         </div>
 
       </section>
