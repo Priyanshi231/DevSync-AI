@@ -116,11 +116,11 @@ const Project = () => {
         {/* CONVERSATION */}
         {/* ================================================= */}
 
-        <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
+        <div className="conversation-area pt-14 pb-10 grow flex flex-col h-full relative">
 
           {/* ================= MESSAGES ================= */}
 
-          <div className="message-box p-1 flex-grow flex flex-col gap-1 overflow-auto max-h-full">
+          <div className="message-box p-1 grow flex flex-col gap-1 overflow-auto max-h-full">
           
             <div className="message flex flex-col p-2 bg-slate-50 rounded-md w-fit max-w-56">
               <small className="text-xs opacity-65">example@gmail.com</small>
@@ -138,7 +138,7 @@ const Project = () => {
           <div className="inputField w-full flex absolute bottom-0">
 
             <input 
-              className='p-2 px-4 border-none outline-none flex-grow' type="text" placeholder='Enter message'>
+              className='p-2 px-4 border-none outline-none grow' type="text" placeholder='Enter message'>
             </input>
 
             <button
