@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "../config/axios";
 import {initializeSocket, receiveMessage, sendMessage} from "../config/socket";
-
+import {UserContext} from "../context/user.context";
 const Project = () => {
   const location = useLocation();
+  const { user } = useContext(UserContext);
 
   // ================= PROJECT =================
 
@@ -22,6 +23,8 @@ const Project = () => {
 
   // Set is used because multiple users can be selected
   const [selectedUserId, setSelectedUserId] = useState(new Set());
+
+  const[message, setMessage] = useState("");
 
   // ================= SELECT USER =================
 
@@ -48,7 +51,6 @@ const Project = () => {
         users: Array.from(selectedUserId),
       })
       .then((res) => {
-        console.log(res.data);
         setIsModalOpen(false);
       })
       .catch((err) => {
@@ -56,18 +58,30 @@ const Project = () => {
       });
   }
 
+  function send(){
+
+    sendMessage('project-message',{
+      message,
+      sender: user._id,
+    })
+
+    setMessage('');
+
+  }
 
   // ================= FETCH PROJECT + USERS =================
 
   useEffect(() => {
-    // Get latest project
-    initializeSocket();
+
+    initializeSocket(project._id);
+    
+    receiveMessage('project-message', (data) => {
+      console.log(data);
+    });
 
     axios
       .get(`/projects/get-project/${location.state.project._id}`)
-      .then((res) => {
-        console.log(res.data.project);
-
+      .then((res) => {  
         setProject(res.data.project);
       })
       .catch((err) => {
@@ -78,7 +92,6 @@ const Project = () => {
     axios
       .get("/users/all")
       .then((res) => {
-        console.log(res.data.users);
 
         setUsers(res.data.users);
       })
@@ -141,10 +154,13 @@ const Project = () => {
           <div className="inputField w-full flex absolute bottom-0">
 
             <input 
+              value={message} 
+              onChange={(e) => setMessage(e.target.value)}
               className='p-2 px-4 border-none outline-none grow' type="text" placeholder='Enter message'>
             </input>
 
             <button
+              onClick={send}
             className='px-5 bg-slate-950 text-white'>
             <i className="ri-send-plane-fill"></i>
             </button>
