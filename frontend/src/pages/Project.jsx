@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "../config/axios";
 import {initializeSocket, receiveMessage, sendMessage} from "../config/socket";
@@ -25,6 +25,8 @@ const Project = () => {
   const [selectedUserId, setSelectedUserId] = useState(new Set());
 
   const[message, setMessage] = useState("");
+
+  const messageBox = React.createRef();
 
   // ================= SELECT USER =================
 
@@ -58,14 +60,16 @@ const Project = () => {
       });
   }
 
-  function send(){
+  const send = () => {
 
     sendMessage('project-message',{
       message,
-      sender: user._id,
+      sender: user
     })
 
-    setMessage('');
+    appendOutgoingMessage(message);
+
+    setMessage("");
 
   }
 
@@ -77,6 +81,7 @@ const Project = () => {
     
     receiveMessage('project-message', (data) => {
       console.log(data);
+      appendIncomingMessage(data);
     });
 
     axios
@@ -99,6 +104,36 @@ const Project = () => {
         console.log(err);
       });
   }, []);
+
+  function appendIncomingMessage(messageObject){
+    const messageBox = document.querySelector('.message-box');
+
+    const message = document.createElement('div');
+    message.classList.add('message', 'flex', 'flex-col', 'p-2', 'bg-slate-50', 'rounded-md', 'w-fit', 'max-w-56');
+    message.innerHTML = `
+      <small className="text-xs opacity-65">${messageObject.sender.email}</small>
+      <p className="text-sm">${messageObject.message}</p>
+    `;
+    messageBox.appendChild(message);
+    scrollToBottom();
+  }
+
+  function appendOutgoingMessage(message){
+    const messageBox = document.querySelector('.message-box');
+
+    const newMessage = document.createElement('div');
+    newMessage.classList.add('ml-auto', 'message', 'flex', 'flex-col', 'p-2', 'bg-slate-50', 'rounded-md', 'w-fit', 'max-w-56');
+    newMessage.innerHTML = `
+      <small className="text-xs opacity-65">${user.email}</small>
+      <p className="text-sm">${message}</p>
+    `;
+    messageBox.appendChild(newMessage);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+      messageBox.current.scrollTop = messageBox.current.scrollHeight;
+  }
 
   return (
     <main className="h-screen w-screen flex bg-slate-100">
@@ -136,17 +171,10 @@ const Project = () => {
 
           {/* ================= MESSAGES ================= */}
 
-          <div className="message-box p-1 grow flex flex-col gap-1 overflow-auto max-h-full">
+          <div 
+            ref={messageBox}
+            className="message-box p-1 grow flex flex-col gap-1 overflow-auto max-h-full">
           
-            <div className="message flex flex-col p-2 bg-slate-50 rounded-md w-fit max-w-56">
-              <small className="text-xs opacity-65">example@gmail.com</small>
-              <p className="text-sm">Hello, this is a sample message.</p>
-            </div>
-
-            <div className="ml-auto flex flex-col p-2 bg-slate-50 rounded-md w-fit max-w-56">
-              <small className="text-xs opacity-65">example@gmail.com</small>
-              <p className="text-sm">Hello everyone, this is a sample message.</p>
-            </div>
           </div>
 
           {/* ================= MESSAGE INPUT ================= */}
