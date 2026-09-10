@@ -47,7 +47,7 @@ io.use ( async (socket, next) => {
     next();
 
   }catch(err){
-    next(error);
+    next(err);
   }
   
 })
@@ -64,11 +64,13 @@ io.on('connection', socket => {
 
     console.log(data);
 
-    io.to(socket.roomId).emit('project-message', data);
+    socket.broadcast.to(socket.roomId).emit('project-message', data);
   })
 
-  socket.on('event', data => { /* … */ });
-  socket.on('disconnect', () => { /* … */ });
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+    socket.leave(socket.roomId);
+    });
 });
 
 
